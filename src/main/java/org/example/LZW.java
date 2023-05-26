@@ -54,7 +54,7 @@ public class LZW {
         }
 
         //write compressed file
-        File newFile = new File(file.split("\\.")[0]+".lzw");
+        File newFile = new File(file+".lzw");
         try {
             ObjectOutputStream outputFile = new ObjectOutputStream(new FileOutputStream(newFile));
             outputFile.writeObject(compressed);
