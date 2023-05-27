@@ -12,14 +12,19 @@ public class Utils {
             ObjectOutputStream outputFile = new ObjectOutputStream(new FileOutputStream(newFile));
             outputFile.writeObject(compressed);
             outputFile.close();
+            System.out.println("File is compressed");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void writeDecompressedFile(String file, ByteArrayOutputStream decompressedData) {
-        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream("decompressed_"+file.substring(0, file.length()-4)))) {
+        String[] s=file.split("\\.");
+        String path=s[0]+"_decompressed."+s[1];
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(path))) {
             outputStream.write(decompressedData.toByteArray());
+            System.out.println("File is decompressed");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

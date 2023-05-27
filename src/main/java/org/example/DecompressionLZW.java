@@ -25,10 +25,12 @@ public class DecompressionLZW {
                 List<Byte> nextByteArray;
                 if (dictionary.containsKey(nextCode)) {
                     nextByteArray = dictionary.get(nextCode).getByteArray();
+
                 } else {
                     nextByteArray = new ArrayList<>();
                     nextByteArray.addAll(currByteArray);
                     nextByteArray.add(currByteArray.get(0));
+
                 }
 
                 decompressed.write(getByteArray(nextByteArray));
