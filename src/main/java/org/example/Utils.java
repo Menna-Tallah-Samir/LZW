@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Utils {
+
     public static void writeCompressedFile(String file, List<Integer> compressed) {
         File newFile = new File(file + ".lzw");
         try {
-            ObjectOutputStream outputFile = new ObjectOutputStream(new FileOutputStream(newFile));
-            outputFile.writeObject(compressed);
+            DataOutputStream outputFile = new DataOutputStream(new FileOutputStream(newFile));
+            for (int code : compressed) {
+                outputFile.writeInt(code);
+            }
             outputFile.close();
             System.out.println("File is compressed");
         } catch (IOException e) {
@@ -19,8 +22,8 @@ public class Utils {
     }
 
     public static void writeDecompressedFile(String file, ByteArrayOutputStream decompressedData) {
-        String[] s=file.split("\\.");
-        String path=s[0]+"_decompressed."+s[1];
+        String[] s = file.split("\\.");
+        String path = s[0] + "_decompressed." + s[1];
         try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(path))) {
             outputStream.write(decompressedData.toByteArray());
             System.out.println("File is decompressed");
@@ -52,14 +55,19 @@ public class Utils {
 
     }
 
-    public static List<Integer> getCompressedInput(String inputFile) {
-        List<Integer> input = new ArrayList<>();
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(new File(inputFile)))) {
-            input = (ArrayList<Integer>) inputStream.readObject();
-        } catch (Exception e) {
+    public static List<Integer> getCompressedInput(String file) {
+        List<Integer> compressed = new ArrayList<>();
+        try {
+            DataInputStream inputFile = new DataInputStream(new FileInputStream(new File(file)));
+            while (inputFile.available() > 0) {
+                int code = inputFile.readInt();
+                compressed.add(code);
+            }
+            inputFile.close();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return input;
+        return compressed;
     }
 
 }
